@@ -41,9 +41,12 @@ The content is organized as follows:
 
 <directory_structure>
 docs/
-  docs/
-    frontend-architecture.md
+  API_CONTRACT.md
+  DEVELOPMENT_RULES.md
+  frontend-architecture.md
   frontend-context.md
+  PROJECT_CONTEXT.md
+  UI_ROUTES.md
 public/
   file.svg
   globe.svg
@@ -62,14 +65,263 @@ next.config.ts
 package.json
 postcss.config.mjs
 README.md
+repomix.config.json
 tsconfig.json
 </directory_structure>
 
 <files>
 This section contains the contents of the repository's files.
 
-<file path="docs/docs/frontend-architecture.md">
+<file path="docs/API_CONTRACT.md">
+# FlexSpace API Contract
 
+This document describes how the frontend communicates with the backend.
+
+Backend base URL:
+
+http://localhost:8080
+
+---
+
+# Spaces
+
+GET /api/spaces
+
+Returns a list of coworking spaces.
+
+Example response:
+
+[
+ {
+  "id": 1,
+  "name": "TechHub Workspace",
+  "city": "Delhi",
+  "description": "Modern coworking space"
+ }
+]
+
+---
+
+# Space Details
+
+GET /api/spaces/{spaceId}
+
+Returns details of a coworking space.
+
+---
+
+# Desks
+
+GET /api/spaces/{spaceId}/desks
+
+Returns desks available in a space.
+
+---
+
+# Desk Availability
+
+GET /api/desks/{deskId}/availability
+
+Returns available time slots.
+
+---
+
+# Book Desk
+
+POST /api/bookings
+
+Request:
+
+{
+ "deskId": 10,
+ "startTime": "2026-03-15T09:00",
+ "endTime": "2026-03-15T18:00"
+}
+
+---
+
+# User Bookings
+
+GET /api/bookings/user
+
+Returns bookings of the current user.
+</file>
+
+<file path="docs/DEVELOPMENT_RULES.md">
+Use functional React components
+Use Tailwind for styling
+Keep components small and reusable
+Avoid global state unless necessary
+Use services folder for API calls
+</file>
+
+<file path="docs/frontend-architecture.md">
+
+</file>
+
+<file path="docs/PROJECT_CONTEXT.md">
+# FlexSpace Frontend Context
+
+FlexSpace is a coworking desk booking platform.
+
+This repository contains the frontend application built using Next.js.
+
+The frontend communicates with a backend REST API built using Java Spring Boot.
+
+The goal of the frontend is to allow users to:
+
+- browse coworking spaces
+- view desk availability
+- book desks
+- manage their bookings
+
+The design should feel similar to booking platforms like Airbnb or WeWork.
+
+---
+
+# Tech Stack
+
+Framework: Next.js (App Router)
+
+Language: TypeScript
+
+Styling: Tailwind CSS
+
+State Management: React state initially (later React Query or Zustand)
+
+Backend API: Spring Boot REST API
+
+Backend base URL:
+
+http://localhost:8080
+
+---
+
+# Core Features
+
+Users should be able to:
+
+1. Browse coworking spaces
+2. View desks inside a space
+3. Check desk availability
+4. Book desks
+5. View booking history
+6. Manage their account
+
+---
+
+# UI Philosophy
+
+Focus on:
+
+- clean layout
+- simple booking flow
+- fast page loading
+- mobile responsiveness
+
+Avoid unnecessary complexity.
+
+---
+
+# Architecture Goals
+
+The frontend should follow a feature-based architecture:
+
+src/
+components/
+features/
+services/
+types/
+
+components → reusable UI components  
+features → feature-specific UI logic  
+services → API communication  
+types → shared TypeScript types
+
+---
+
+# Backend Responsibilities
+
+The backend handles:
+
+- authentication
+- booking validation
+- desk availability
+- database storage
+
+The frontend should never enforce booking rules.
+</file>
+
+<file path="docs/UI_ROUTES.md">
+# FlexSpace Frontend Routes
+
+This document describes all pages in the frontend.
+
+---
+
+# Landing Page
+
+/
+
+Purpose:
+
+Introduce FlexSpace and allow users to explore spaces.
+
+---
+
+# Spaces Listing
+
+/spaces
+
+Displays all coworking spaces.
+
+---
+
+# Space Details
+
+/spaces/[spaceId]
+
+Displays details of a coworking space.
+
+Includes:
+
+- list of desks
+- booking options
+
+---
+
+# Booking Page
+
+/book
+
+Allows user to book a desk.
+
+---
+
+# User Dashboard
+
+/dashboard
+
+Displays:
+
+- upcoming bookings
+- past bookings
+
+---
+
+# Authentication
+
+/login
+
+User login page.
+
+---
+
+# Future Pages
+
+/register
+/profile
+/admin
 </file>
 
 <file path="docs/frontend-context.md">
@@ -314,55 +566,6 @@ export default function Home() {
 }
 </file>
 
-<file path=".gitignore">
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# repomix
-repomix.config.js
-repomix.config.json
-repomix-output.md
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-</file>
-
 <file path="eslint.config.mjs">
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
@@ -394,36 +597,6 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 </file>
 
-<file path="package.json">
-{
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "repomix": "^1.12.0",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
-</file>
-
 <file path="postcss.config.mjs">
 const config = {
   plugins: {
@@ -434,29 +607,16 @@ const config = {
 export default config;
 </file>
 
-<file path="README.md">
-# FlexSpace Frontend
-
-Frontend application for the FlexSpace coworking desk booking platform.
-
-Built with Next.js and Tailwind CSS.
-
-## Tech Stack
-
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-
-## Features
-
-- Browse coworking spaces
-- View desk availability
-- Book desks
-- Manage bookings
-- Authentication
-
-## Project Structure
+<file path="repomix.config.json">
+{
+  "ignore": {
+    "patterns": [
+      "node_modules",
+      ".next",
+      "dist"
+    ]
+  }
+}
 </file>
 
 <file path="tsconfig.json">
@@ -494,6 +654,106 @@ Built with Next.js and Tailwind CSS.
   ],
   "exclude": ["node_modules"]
 }
+</file>
+
+<file path=".gitignore">
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# repomix
+repomix-output.md
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="package.json">
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "repomix": "^1.12.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="README.md">
+# FlexSpace Frontend
+
+Frontend application for the FlexSpace coworking desk booking platform.
+
+Built with Next.js and Tailwind CSS.
+
+## Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+## Features
+
+- Browse coworking spaces
+- View desk availability
+- Book desks
+- Manage bookings
+- Authentication
+
+## Project Structure
 </file>
 
 </files>
