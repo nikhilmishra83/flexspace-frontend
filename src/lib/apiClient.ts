@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Get base URL from env, default to Spring Boot local server
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,

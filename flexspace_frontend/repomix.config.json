@@ -1,9 +1,0 @@
-{
-  "ignore": {
-    "patterns": [
-      "node_modules",
-      ".next",
-      "dist"
-    ]
-  }
-}

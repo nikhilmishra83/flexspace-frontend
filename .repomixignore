@@ -1,0 +1,38 @@
+# 1. Git Internal Files (Huge source of noise)
+.git/
+
+# 2. Maven Wrapper Scripts (Boilerplate, no business logic)
+mvnw
+mvnw.cmd
+.mvn/
+
+# 3. Logs and Compressed Files
+logs/
+*.log
+*.log.*
+*.gz
+*.zip
+
+# 4. Media and Asset Files (Next.js default SVGs take up a lot of lines)
+*.svg
+*.ico
+*.png
+*.jpg
+*.jpeg
+
+# 5. Repomix Output Files (Prevents recursive inclusion)
+repomix-output.md
+repomix-output.xml
+repomix-output.txt
+
+# 6. Duplicate Frontend Directory
+# NOTE: Your file list shows that the entire Next.js app exists twice 
+# (once in `flexspace-frontend/` and again in `flexspace-frontend/flexspace_frontend/`).
+flexspace-frontend/flexspace_frontend/
+
+# 7. (Optional) Lockfiles & Build caches (If not already caught by .gitignore)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.next/
+target/
